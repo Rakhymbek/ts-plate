@@ -45,6 +45,7 @@ export function RickAndMorty() {
   const setSort = useCallback(
     (payload: string) => {
       dispatch({ type: CharactersActionType.SET_SORT, payload });
+      dispatch({ type: CharactersActionType.SET_PAGE, payload: 1 });
     },
     [dispatch]
   );
