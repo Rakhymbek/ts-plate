@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardMedia,
+  CircularProgress,
   Container,
   FormControl,
   InputLabel,
@@ -30,7 +31,7 @@ export function RickAndMorty() {
   const { fetchCharacters } = useCharacterActions();
 
   useEffect(() => {
-    fetchCharacters({ query: "", page , sortBy: sort});
+    fetchCharacters({ query: "", page, sortBy: sort });
   }, [fetchCharacters, sort, page]);
 
   const setQuery = useCallback(
@@ -90,19 +91,19 @@ export function RickAndMorty() {
                   Sort by status
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={sort}
-                    label="Sort by status"
-                    onChange={(e) => {
-                      setSort(e.target.value);
-                      searchCharacters({sortBy: e.target.value})
-                    }}
-                  >
-                    <MenuItem value={"alive"}>Alive</MenuItem>
-                    <MenuItem value={"dead"}>Dead</MenuItem>
-                    <MenuItem value={"unknown"}>unknown</MenuItem>
-                  </Select>
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={sort}
+                  label="Sort by status"
+                  onChange={(e) => {
+                    setSort(e.target.value);
+                    searchCharacters({ sortBy: e.target.value });
+                  }}
+                >
+                  <MenuItem value={"alive"}>Alive</MenuItem>
+                  <MenuItem value={"dead"}>Dead</MenuItem>
+                  <MenuItem value={"unknown"}>unknown</MenuItem>
+                </Select>
               </FormControl>
             }
             <TextField
@@ -119,7 +120,10 @@ export function RickAndMorty() {
 
         <ul className="characters_list">
           {!characters ? (
-            <h1 style={{ fontSize: 80 }}>There is nothing here</h1>
+            <CircularProgress
+              size={100}
+              style={{ position: "absolute", top: "50%" }}
+            />
           ) : (
             characters.map((character, index) => (
               <Card

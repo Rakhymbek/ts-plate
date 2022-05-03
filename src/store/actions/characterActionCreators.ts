@@ -5,7 +5,6 @@ import { CharactersActionType } from "../reducers/charactersReducer";
 export const fetchCharacters =
   ({ query = "", page = 1, sortBy = "" } = {}) =>
   (dispatch: Dispatch) => {
-    dispatch({ type: CharactersActionType.SET_CHARACTERS });
     axios
       .get(
         `https://rickandmortyapi.com/api/character/?page=${page}&name=${query}&status=${sortBy}`
@@ -24,4 +23,5 @@ export const fetchCharacters =
           payload: page,
         });
       });
+    dispatch({ type: CharactersActionType.SET_CHARACTERS });
   };
