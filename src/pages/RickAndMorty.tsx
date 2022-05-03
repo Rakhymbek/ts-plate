@@ -46,6 +46,7 @@ export function RickAndMorty() {
     (payload: string) => {
       dispatch({ type: CharactersActionType.SET_SORT, payload });
       dispatch({ type: CharactersActionType.SET_PAGE, payload: 1 });
+      dispatch({ type: CharactersActionType.SET_QUERY, payload: query });
     },
     [dispatch]
   );
