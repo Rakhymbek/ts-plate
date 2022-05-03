@@ -26,6 +26,7 @@ export function RickAndMorty() {
   const { page } = useTypedSelector((state) => state.characters);
   const { query } = useTypedSelector((state) => state.characters);
   const { sort } = useTypedSelector((state) => state.characters);
+  const { error } = useTypedSelector((state) => state.characters);
   const dispatch = useDispatch();
 
   const { fetchCharacters } = useCharacterActions();
@@ -106,108 +107,127 @@ export function RickAndMorty() {
                 </Select>
               </FormControl>
             }
-            <TextField
-              id="standard-basic"
-              label="Search"
-              variant="standard"
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <Button onClick={() => searchCharacters()} className="search_btn">
-              Search
-            </Button>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                searchCharacters();
+              }}
+              style={{ display: "flex" }}
+            >
+              <TextField
+                id="standard-basic"
+                label="Search"
+                variant="standard"
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <Button type="submit" className="search_btn">
+                Search
+              </Button>
+            </form>
           </div>
         </div>
-
-        <ul className="characters_list">
-          {!characters ? (
-            <CircularProgress
-              size={100}
-              style={{ position: "absolute", top: "50%" }}
-            />
-          ) : (
-            characters.map((character, index) => (
-              <Card
-                sx={{
-                  display: "flex",
-                  maxWidth: 600,
-                  height: 220,
-                  flexGrow: 1,
-                  boxShadow: 3,
-                  transition: "0.2s ease-in-out",
-                }}
-                key={index}
-                className="characters_card"
-              >
-                <CardMedia
-                  component="img"
-                  sx={{ width: 230 }}
-                  image={character.image}
-                  alt="Live from space album cover"
-                />
-                <Box
+        {error ? (
+          <div
+            style={{
+              fontSize: 40,
+              textAlign: "center",
+              border: "1px solid red",
+            }}
+          >
+            {error}
+          </div>
+        ) : (
+          <ul className="characters_list">
+            {!characters ? (
+              <CircularProgress
+                size={100}
+                style={{ position: "absolute", top: "50%" }}
+              />
+            ) : (
+              characters.map((character, index) => (
+                <Card
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
+                    maxWidth: 600,
+                    height: 220,
                     flexGrow: 1,
+                    boxShadow: 3,
+                    transition: "0.2s ease-in-out",
                   }}
+                  key={index}
+                  className="characters_card"
                 >
-                  <CardContent
-                    className="character_card_content"
+                  <CardMedia
+                    component="img"
+                    sx={{ width: 230 }}
+                    image={character.image}
+                    alt="Live from space album cover"
+                  />
+                  <Box
                     sx={{
-                      flex: "1 0 auto",
-                      backgroundColor: "rgb(60, 62, 68)",
+                      display: "flex",
+                      flexDirection: "column",
+                      flexGrow: 1,
                     }}
                   >
-                    <Typography component="div" variant="h5">
-                      <h2
-                        /*  onClick={() => navigate("/RickAndMorty/" + character.id)} */
-                        className="character_title"
-                      >
-                        {character.name}
-                      </h2>
-                    </Typography>
-                    <Typography
-                      fontFamily="Segoe UI"
-                      color="white"
-                      component="div"
+                    <CardContent
+                      className="character_card_content"
+                      sx={{
+                        flex: "1 0 auto",
+                        backgroundColor: "rgb(60, 62, 68)",
+                      }}
                     >
-                      <span className="character_status">
-                        <span
-                          className="status_icon"
-                          style={{
-                            backgroundColor:
-                              character.status === "Alive"
-                                ? "rgb(85, 204, 68)"
-                                : character.status === "Dead"
-                                ? "rgb(214, 61, 46)"
-                                : "rgb(158, 158, 158)",
-                          }}
-                        ></span>
-                        {character.status} - {character.species}
-                      </span>
+                      <Typography component="div" variant="h5">
+                        <h2
+                          /*  onClick={() => navigate("/RickAndMorty/" + character.id)} */
+                          className="character_title"
+                        >
+                          {character.name}
+                        </h2>
+                      </Typography>
                       <Typography
                         fontFamily="Segoe UI"
-                        fontWeight={500}
-                        color="rgb(158, 158, 158)"
+                        color="white"
                         component="div"
-                        marginTop={2}
                       >
-                        <span>Last known location:</span>
-                        <h3 className="character_location">
-                          {character.location.name}
-                        </h3>
-                        <div style={{ marginTop: 16 }}>
-                          <span>First seen in:</span>
-                          <h3 className="character_location">location</h3>
-                        </div>
+                        <span className="character_status">
+                          <span
+                            className="status_icon"
+                            style={{
+                              backgroundColor:
+                                character.status === "Alive"
+                                  ? "rgb(85, 204, 68)"
+                                  : character.status === "Dead"
+                                  ? "rgb(214, 61, 46)"
+                                  : "rgb(158, 158, 158)",
+                            }}
+                          ></span>
+                          {character.status} - {character.species}
+                        </span>
+                        <Typography
+                          fontFamily="Segoe UI"
+                          fontWeight={500}
+                          color="rgb(158, 158, 158)"
+                          component="div"
+                          marginTop={2}
+                        >
+                          <span>Last known location:</span>
+                          <h3 className="character_location">
+                            {character.location.name}
+                          </h3>
+                          <div style={{ marginTop: 16 }}>
+                            <span>First seen in:</span>
+                            <h3 className="character_location">location</h3>
+                          </div>
+                        </Typography>
                       </Typography>
-                    </Typography>
-                  </CardContent>
-                </Box>
-              </Card>
-            ))
-          )}
-        </ul>
+                    </CardContent>
+                  </Box>
+                </Card>
+              ))
+            )}
+          </ul>
+        )}
         {!characters ? (
           ""
         ) : (

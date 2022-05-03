@@ -5,7 +5,8 @@ export enum CharactersActionType {
   SET_TOTAL_PAGES = "TOTAL_PAGES/SET",
   SET_PAGE = "PAGE/SET",
   SET_QUERY = "QUERY/SET",
-  SET_SORT = "SORT/SET"
+  SET_SORT = "SORT/SET",
+  GET_ERROR = "ERROR/GET",
 }
 
 export type FetchCharactersAction = {
@@ -33,6 +34,11 @@ export type FetchCharactersSort = {
   payload: string;
 };
 
+export type GetCharactersError = {
+  type: CharactersActionType.GET_ERROR;
+  payload: string;
+};
+
 type Location = {
   name: string;
   url: string;
@@ -53,7 +59,8 @@ export type CharactersState = {
   totalPages: number;
   page: number;
   query: string;
-  sort: string
+  sort: string;
+  error?: string;
 };
 
 const initState = {
@@ -64,6 +71,7 @@ const initState = {
   page: 1,
   episodePage: 1,
   sort: "",
+  error: "",
 };
 
 export type CharactersAction =
@@ -71,13 +79,15 @@ export type CharactersAction =
   | FetchCharactersTotalPages
   | FetchCharactersPages
   | FetchCharactersQuery
-  | FetchCharactersSort;
+  | FetchCharactersSort
+  | GetCharactersError;
 
 export const charactersReducer: Reducer<CharactersState, CharactersAction> = (
   state = initState,
   action
 ) => {
   const newState = { ...state };
+  newState.error = "";
   switch (action.type) {
     case CharactersActionType.SET_CHARACTERS:
       newState.characters = action.payload;
@@ -91,8 +101,11 @@ export const charactersReducer: Reducer<CharactersState, CharactersAction> = (
     case CharactersActionType.SET_QUERY:
       newState.query = action.payload;
       break;
-      case CharactersActionType.SET_SORT:
+    case CharactersActionType.SET_SORT:
       newState.sort = action.payload;
+      break;
+    case CharactersActionType.GET_ERROR:
+      newState.error = action.payload;
       break;
     default:
       return state;
