@@ -7,6 +7,10 @@ a {
   color: #fff;
 }
 
+body {
+  background-color: #E5E5E5;
+}
+
 .characters_list {
   display: flex;
   align-items: center;
